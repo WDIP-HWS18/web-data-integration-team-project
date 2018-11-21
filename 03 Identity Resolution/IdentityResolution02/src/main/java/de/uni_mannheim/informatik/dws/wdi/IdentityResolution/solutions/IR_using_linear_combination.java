@@ -9,6 +9,7 @@ import de.uni_mannheim.informatik.dws.wdi.IdentityResolution.Blocking.MovieBlock
 import de.uni_mannheim.informatik.dws.wdi.IdentityResolution.Blocking.MovieBlockingKeyByTitleGenerator;
 import de.uni_mannheim.informatik.dws.wdi.IdentityResolution.Blocking.MusicBlockingKeyBySongGenreGenerator;
 import de.uni_mannheim.informatik.dws.wdi.IdentityResolution.Blocking.MusicBlockingKeyBySongNameGenerator;
+import de.uni_mannheim.informatik.dws.wdi.IdentityResolution.Blocking.MusicBlockingKeyBySongYearGenerator;
 import de.uni_mannheim.informatik.dws.wdi.IdentityResolution.Comparators.MovieDateComparator10Years;
 import de.uni_mannheim.informatik.dws.wdi.IdentityResolution.Comparators.MovieDateComparator2Years;
 import de.uni_mannheim.informatik.dws.wdi.IdentityResolution.Comparators.MovieTitleComparatorJaccard;
@@ -69,11 +70,12 @@ public class IR_using_linear_combination
 		matchingRule.activateDebugReport("data/output/debugResultsMatchingRule.csv", 1000);
 		
 		// add comparators
-		matchingRule.addComparator(new MusicBlockingKeyBySongNameGenerator(), 0.3);
-		matchingRule.addComparator(new MusicBlockingKeyBySongGenreGenerator(), 0.7);
+		matchingRule.addComparator(new MusicBlockingKeyBySongGenreGenerator(), 0.3);
+		//matchingRule.addComparator(new MusicBlockingKeyBySongNameGenerator(), 0.3);
+		//matchingRule.addComparator(new MusicBlockingKeyBySongGenreGenerator(), 0.7);
 		
 		// create a blocker (blocking strategy)
-		StandardRecordBlocker<Music, Attribute> blocker = new StandardRecordBlocker<Music, Attribute>(new MovieBlockingKeyByTitleGenerator());
+		StandardRecordBlocker<Music, Attribute> blocker = new StandardRecordBlocker<Music, Attribute>(new MusicBlockingKeyBySongYearGenerator());
 		blocker.collectBlockSizeData("data/output/debugResultsBlocking.csv", 100);
 		
 		// Initialize Matching Engine
@@ -89,11 +91,11 @@ public class IR_using_linear_combination
 		System.out.println("*\n*\tLoading gold standard\n*");
 		MatchingGoldStandard gsTest = new MatchingGoldStandard();
 		gsTest.loadFromCSVFile(new File(
-				"data/goldstandard/gs_academy_awards_2_actors_test.csv"));
+				"data/goldstandard/gs_million_SPARQL_2atts1_test.csv"));
 		
 		// evaluate your result
 		System.out.println("*\n*\tEvaluating result\n*");
-		MatchingEvaluator<Music, Attribute> evaluator = new MatchingEvaluator<Movie, Attribute>();
+		MatchingEvaluator<Music, Attribute> evaluator = new MatchingEvaluator<Music, Attribute>();
 		Performance perfTest = evaluator.evaluateMatching(correspondences,
 				gsTest);
 		
@@ -112,7 +114,7 @@ public class IR_using_linear_combination
 		//  correspondences = engine.getTopKInstanceCorrespondences(correspondences, 1, 0.0);
 
 		// Alternative: Create a maximum-weight, bipartite matching
-		MaximumBipartiteMatchingAlgorithm<Movie,Attribute> maxWeight = new MaximumBipartiteMatchingAlgorithm<>(correspondences);
+		MaximumBipartiteMatchingAlgorithm<Music,Attribute> maxWeight = new MaximumBipartiteMatchingAlgorithm<>(correspondences);
 		maxWeight.run();
 		correspondences = maxWeight.getResult();
 
