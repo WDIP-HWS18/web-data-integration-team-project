@@ -8,10 +8,13 @@ import de.uni_mannheim.informatik.dws.wdi.IdentityResolution.ErrorAnalysis;
 import de.uni_mannheim.informatik.dws.wdi.IdentityResolution.Blocking.MovieBlockingKeyByDecadeGenerator;
 import de.uni_mannheim.informatik.dws.wdi.IdentityResolution.Blocking.MovieBlockingKeyByTitleGenerator;
 import de.uni_mannheim.informatik.dws.wdi.IdentityResolution.Blocking.MovieBlockingKeyByYearGenerator;
+import de.uni_mannheim.informatik.dws.wdi.IdentityResolution.Blocking.MusicBlockingKeyBySongNameGenerator;
 import de.uni_mannheim.informatik.dws.wdi.IdentityResolution.Comparators.MovieDateComparator10Years;
 import de.uni_mannheim.informatik.dws.wdi.IdentityResolution.Comparators.MovieDateComparator2Years;
 import de.uni_mannheim.informatik.dws.wdi.IdentityResolution.Comparators.MovieTitleComparatorJaccard;
 import de.uni_mannheim.informatik.dws.wdi.IdentityResolution.Comparators.MovieTitleComparatorLevenshtein;
+import de.uni_mannheim.informatik.dws.wdi.IdentityResolution.Comparators.MusicSongGenreComparatorLevenshtein;
+import de.uni_mannheim.informatik.dws.wdi.IdentityResolution.Comparators.MusicSongNameComparatorJaccard;
 import de.uni_mannheim.informatik.dws.wdi.IdentityResolution.model.Music;
 import de.uni_mannheim.informatik.dws.wdi.IdentityResolution.model.MusicXMLReader;
 import de.uni_mannheim.informatik.dws.winter.matching.MatchingEngine;
@@ -76,46 +79,46 @@ public class IR_using_linear_combination_blocker_test
 				0.7);
 		
 		// add comparators
-		matchingRule.addComparator(new MovieDateComparator2Years(), 0.3);
-		matchingRule.addComparator(new MovieTitleComparatorJaccard(), 0.7);
+		matchingRule.addComparator(new MusicSongGenreComparatorLevenshtein(), 0.3);
+		matchingRule.addComparator(new MusicSongNameComparatorJaccard(), 0.7);
 		
 		// create a blocker (blocking strategy)
-		Blocker<Movie,Attribute,Movie,Attribute> blocker = new StandardRecordBlocker<>(new MovieBlockingKeyByTitleGenerator());
+		Blocker<Music,Attribute,Music,Attribute> blocker = new StandardRecordBlocker<>(new MusicBlockingKeyBySongNameGenerator());
 		
 		System.out.println("*\n*\tStandard Blocker: by title\n*");
-		testBlocker(blocker, dataAcademyAwards, dataActors, matchingRule, gsTest);
+		testBlocker(blocker, million14, SPARQL78, matchingRule, gsTest);
 
 		System.out.println("*\n*\tStandard Blocker: by decade\n*");
 		blocker = new StandardRecordBlocker<>(new MovieBlockingKeyByDecadeGenerator());
-		testBlocker(blocker, dataAcademyAwards, dataActors, matchingRule, gsTest);
+		testBlocker(blocker, million14, SPARQL78, matchingRule, gsTest);
 
 		System.out.println("*\n*\tStandard Blocker: by year\n*");
 		blocker = new StandardRecordBlocker<>(new MovieBlockingKeyByYearGenerator());
-		testBlocker(blocker, dataAcademyAwards, dataActors, matchingRule, gsTest);
+		testBlocker(blocker, million14, SPARQL78, matchingRule, gsTest);
 
 		System.out.println("*\n*\tSorted-Neighbourhood Blocker: by year\n*");
 		blocker = new SortedNeighbourhoodBlocker<>(new MovieBlockingKeyByYearGenerator(), 30);
-		testBlocker(blocker, dataAcademyAwards, dataActors, matchingRule, gsTest);
+		testBlocker(blocker, million14, SPARQL78, matchingRule, gsTest);
 
 		System.out.println("*\n*\tSorted-Neighbourhood Blocker: by title\n*");
 		blocker = new SortedNeighbourhoodBlocker<>(new MovieBlockingKeyByTitleGenerator(), 30);
-		testBlocker(blocker, dataAcademyAwards, dataActors, matchingRule, gsTest);
+		testBlocker(blocker, million14, SPARQL78, matchingRule, gsTest);
 
 		System.out.println("*\n*\tNo Blocker\n*");
 		blocker = new NoBlocker<>();
-		testBlocker(blocker, dataAcademyAwards, dataActors, matchingRule, gsTest);
+		testBlocker(blocker, million14, SPARQL78, matchingRule, gsTest);
 	}
 	
-	protected static void testBlocker(Blocker<Movie,Attribute,Movie,Attribute> blocker, DataSet<Movie,Attribute> ds1, DataSet<Movie,Attribute> ds2, MatchingRule<Movie,Attribute> rule, MatchingGoldStandard gsTest) {
+	protected static void testBlocker(Blocker<Music,Attribute,Music,Attribute> blocker, DataSet<Music,Attribute> ds1, DataSet<Music,Attribute> ds2, MatchingRule<Music,Attribute> rule, MatchingGoldStandard gsTest) {
 		// Initialize Matching Engine
-		MatchingEngine<Movie, Attribute> engine = new MatchingEngine<>();
+		MatchingEngine<Music, Attribute> engine = new MatchingEngine<>();
 
 		// Execute the matching
-		Processable<Correspondence<Movie, Attribute>> correspondences = engine.runIdentityResolution(ds1, ds2, null, rule,blocker);
+		Processable<Correspondence<Music, Attribute>> correspondences = engine.runIdentityResolution(ds1, ds2, null, rule,blocker);
 
 		// evaluate your result
 		System.out.println("*\n*\tEvaluating result\n*");
-		MatchingEvaluator<Movie, Attribute> evaluator = new MatchingEvaluator<Movie, Attribute>();
+		MatchingEvaluator<Music, Attribute> evaluator = new MatchingEvaluator<Music, Attribute>();
 		Performance perfTest = evaluator.evaluateMatching(correspondences,
 			gsTest);
 
