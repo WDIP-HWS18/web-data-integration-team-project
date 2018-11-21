@@ -22,7 +22,9 @@ public class MusicSongNameComparatorJaccard implements Comparator<Music, Attribu
             Correspondence<Attribute, Matchable> schemaCorrespondences) {
 
         String s1 = record1.getSongName();
+        System.out.print(s1);
         String s2 = record2.getSongName();
+        System.out.println(s2);
 
         // calculate similarity
         double similarity = sim.calculate(s1, s2);
