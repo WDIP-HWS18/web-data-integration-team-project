@@ -7,12 +7,16 @@ import org.apache.logging.log4j.Logger;
 import de.uni_mannheim.informatik.dws.wdi.IdentityResolution.ErrorAnalysis;
 import de.uni_mannheim.informatik.dws.wdi.IdentityResolution.Blocking.MovieBlockingKeyByDecadeGenerator;
 import de.uni_mannheim.informatik.dws.wdi.IdentityResolution.Blocking.MovieBlockingKeyByTitleGenerator;
+import de.uni_mannheim.informatik.dws.wdi.IdentityResolution.Blocking.MusicBlockingKeyBySongGenreGenerator;
+import de.uni_mannheim.informatik.dws.wdi.IdentityResolution.Blocking.MusicBlockingKeyBySongNameGenerator;
 import de.uni_mannheim.informatik.dws.wdi.IdentityResolution.Comparators.MovieDateComparator10Years;
 import de.uni_mannheim.informatik.dws.wdi.IdentityResolution.Comparators.MovieDateComparator2Years;
 import de.uni_mannheim.informatik.dws.wdi.IdentityResolution.Comparators.MovieTitleComparatorJaccard;
 import de.uni_mannheim.informatik.dws.wdi.IdentityResolution.Comparators.MovieTitleComparatorLevenshtein;
 import de.uni_mannheim.informatik.dws.wdi.IdentityResolution.model.Movie;
 import de.uni_mannheim.informatik.dws.wdi.IdentityResolution.model.MovieXMLReader;
+import de.uni_mannheim.informatik.dws.wdi.IdentityResolution.model.Music;
+import de.uni_mannheim.informatik.dws.wdi.IdentityResolution.model.MusicXMLReader;
 import de.uni_mannheim.informatik.dws.winter.matching.MatchingEngine;
 import de.uni_mannheim.informatik.dws.winter.matching.MatchingEvaluator;
 import de.uni_mannheim.informatik.dws.winter.matching.algorithms.MaximumBipartiteMatchingAlgorithm;
@@ -54,31 +58,31 @@ public class IR_using_linear_combination
     {
 		// loading data
 		System.out.println("*\n*\tLoading datasets\n*");
-		HashedDataSet<Movie, Attribute> dataAcademyAwards = new HashedDataSet<>();
-		new MovieXMLReader().loadFromXML(new File("data/input/academy_awards.xml"), "/movies/movie", dataAcademyAwards);
-		HashedDataSet<Movie, Attribute> dataActors = new HashedDataSet<>();
-		new MovieXMLReader().loadFromXML(new File("data/input/actors.xml"), "/movies/movie", dataActors);
+		HashedDataSet<Music, Attribute> million14 = new HashedDataSet<>();
+		new MusicXMLReader().loadFromXML(new File("data/input/million14.xml"), "/music/music", million14);
+		HashedDataSet<Music, Attribute> SPARQL78 = new HashedDataSet<>();
+		new MusicXMLReader().loadFromXML(new File("data/input/SPARQL78.xml"), "/music/music", SPARQL78);
 
 		// create a matching rule
-		LinearCombinationMatchingRule<Movie, Attribute> matchingRule = new LinearCombinationMatchingRule<>(
+		LinearCombinationMatchingRule<Music, Attribute> matchingRule = new LinearCombinationMatchingRule<>(
 				0.7);
 		matchingRule.activateDebugReport("data/output/debugResultsMatchingRule.csv", 1000);
 		
 		// add comparators
-		matchingRule.addComparator(new MovieDateComparator2Years(), 0.3);
-		matchingRule.addComparator(new MovieTitleComparatorJaccard(), 0.7);
+		matchingRule.addComparator(new MusicBlockingKeyBySongNameGenerator(), 0.3);
+		matchingRule.addComparator(new MusicBlockingKeyBySongGenreGenerator(), 0.7);
 		
 		// create a blocker (blocking strategy)
-		StandardRecordBlocker<Movie, Attribute> blocker = new StandardRecordBlocker<Movie, Attribute>(new MovieBlockingKeyByTitleGenerator());
+		StandardRecordBlocker<Music, Attribute> blocker = new StandardRecordBlocker<Music, Attribute>(new MovieBlockingKeyByTitleGenerator());
 		blocker.collectBlockSizeData("data/output/debugResultsBlocking.csv", 100);
 		
 		// Initialize Matching Engine
-		MatchingEngine<Movie, Attribute> engine = new MatchingEngine<>();
+		MatchingEngine<Music, Attribute> engine = new MatchingEngine<>();
 
 		System.out.println("*\n*\tRunning identity resolution\n*");
 		// Execute the matching
-		Processable<Correspondence<Movie, Attribute>> correspondences = engine.runIdentityResolution(
-				dataAcademyAwards, dataActors, null, matchingRule,
+		Processable<Correspondence<Music, Attribute>> correspondences = engine.runIdentityResolution(
+			million14, SPARQL78, null, matchingRule,
 				blocker);
 
 		// load the gold standard (test set)
@@ -89,7 +93,7 @@ public class IR_using_linear_combination
 		
 		// evaluate your result
 		System.out.println("*\n*\tEvaluating result\n*");
-		MatchingEvaluator<Movie, Attribute> evaluator = new MatchingEvaluator<Movie, Attribute>();
+		MatchingEvaluator<Music, Attribute> evaluator = new MatchingEvaluator<Movie, Attribute>();
 		Performance perfTest = evaluator.evaluateMatching(correspondences,
 				gsTest);
 		
