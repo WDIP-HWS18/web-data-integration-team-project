@@ -22,7 +22,9 @@ public class MusicSongGenreComparatorLevenshtein implements Comparator<Music, At
             Correspondence<Attribute, Matchable> schemaCorrespondences) {
 
         String s1 = record1.getSongGenre();
+        System.out.println(s1);
         String s2 = record2.getSongGenre();
+        System.out.println(s2);
 
         double similarity = sim.calculate(s1, s2);
 
