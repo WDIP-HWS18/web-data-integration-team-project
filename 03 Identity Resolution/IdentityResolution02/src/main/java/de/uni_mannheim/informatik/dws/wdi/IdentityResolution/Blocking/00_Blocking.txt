@@ -1,6 +1,0 @@
-MusicBlockingKeyByAlbumNameGenerator
-MusicBlockingKeyBySonGenreGenerator
-MusicBlockingKeyBySongNameGenerator
-MusicBlockingKeyBySongYearGenerator
-
-ArtistBlockingKeyByArtistNameGenerator
