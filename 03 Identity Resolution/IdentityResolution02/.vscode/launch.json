@@ -2,6 +2,17 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CodeLens (Launch) - IR_using_linear_combination_blocker_test",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "stopOnEntry": false,
+            "mainClass": "de.uni_mannheim.informatik.dws.wdi.IdentityResolution.solutions.IR_using_linear_combination_blocker_test",
+            "args": "",
+            "projectName": "ExerciseIdentityResolution"
+        },
+        {
+            "type": "java",
             "name": "CodeLens (Launch) - IR_using_linear_combination",
             "request": "launch",
             "cwd": "${workspaceFolder}",

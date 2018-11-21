@@ -5,10 +5,14 @@ import java.io.File;
 import org.apache.logging.log4j.Logger;
 
 import de.uni_mannheim.informatik.dws.wdi.IdentityResolution.ErrorAnalysis;
+import de.uni_mannheim.informatik.dws.wdi.IdentityResolution.Blocking.ArtistBlockingKeyByArtistNameGenerator;
 import de.uni_mannheim.informatik.dws.wdi.IdentityResolution.Blocking.MovieBlockingKeyByDecadeGenerator;
 import de.uni_mannheim.informatik.dws.wdi.IdentityResolution.Blocking.MovieBlockingKeyByTitleGenerator;
 import de.uni_mannheim.informatik.dws.wdi.IdentityResolution.Blocking.MovieBlockingKeyByYearGenerator;
+import de.uni_mannheim.informatik.dws.wdi.IdentityResolution.Blocking.MusicBlockingKeyByAlbumNameGenerator;
+import de.uni_mannheim.informatik.dws.wdi.IdentityResolution.Blocking.MusicBlockingKeyBySongGenreGenerator;
 import de.uni_mannheim.informatik.dws.wdi.IdentityResolution.Blocking.MusicBlockingKeyBySongNameGenerator;
+import de.uni_mannheim.informatik.dws.wdi.IdentityResolution.Blocking.MusicBlockingKeyBySongYearGenerator;
 import de.uni_mannheim.informatik.dws.wdi.IdentityResolution.Comparators.MovieDateComparator10Years;
 import de.uni_mannheim.informatik.dws.wdi.IdentityResolution.Comparators.MovieDateComparator2Years;
 import de.uni_mannheim.informatik.dws.wdi.IdentityResolution.Comparators.MovieTitleComparatorJaccard;
@@ -88,20 +92,20 @@ public class IR_using_linear_combination_blocker_test
 		System.out.println("*\n*\tStandard Blocker: by title\n*");
 		testBlocker(blocker, million14, SPARQL78, matchingRule, gsTest);
 
-		System.out.println("*\n*\tStandard Blocker: by decade\n*");
-		blocker = new StandardRecordBlocker<>(new MovieBlockingKeyByDecadeGenerator());
+		System.out.println("*\n*\tStandard Blocker: by songName\n*");
+		blocker = new StandardRecordBlocker<>(new MusicBlockingKeyBySongNameGenerator());
 		testBlocker(blocker, million14, SPARQL78, matchingRule, gsTest);
 
-		System.out.println("*\n*\tStandard Blocker: by year\n*");
-		blocker = new StandardRecordBlocker<>(new MovieBlockingKeyByYearGenerator());
+		System.out.println("*\n*\tStandard Blocker: by songGenre\n*");
+		blocker = new StandardRecordBlocker<>(new MusicBlockingKeyBySongGenreGenerator());
 		testBlocker(blocker, million14, SPARQL78, matchingRule, gsTest);
 
-		System.out.println("*\n*\tSorted-Neighbourhood Blocker: by year\n*");
-		blocker = new SortedNeighbourhoodBlocker<>(new MovieBlockingKeyByYearGenerator(), 30);
+		System.out.println("*\n*\tSorted-Neighbourhood Blocker: by albumName\n*");
+		blocker = new SortedNeighbourhoodBlocker<>(new MusicBlockingKeyByAlbumNameGenerator(), 30);
 		testBlocker(blocker, million14, SPARQL78, matchingRule, gsTest);
 
-		System.out.println("*\n*\tSorted-Neighbourhood Blocker: by title\n*");
-		blocker = new SortedNeighbourhoodBlocker<>(new MovieBlockingKeyByTitleGenerator(), 30);
+		System.out.println("*\n*\tSorted-Neighbourhood Blocker: by songYear\n*");
+		blocker = new SortedNeighbourhoodBlocker<>(new MusicBlockingKeyBySongYearGenerator(), 30);
 		testBlocker(blocker, million14, SPARQL78, matchingRule, gsTest);
 
 		System.out.println("*\n*\tNo Blocker\n*");
@@ -123,7 +127,7 @@ public class IR_using_linear_combination_blocker_test
 			gsTest);
 
 		// print the evaluation result
-		System.out.println("Academy Awards <-> Actors");
+		System.out.println("million14 <-> Music");
 		System.out.println(String.format(
 			"Precision: %.4f",perfTest.getPrecision()));
 		System.out.println(String.format(
