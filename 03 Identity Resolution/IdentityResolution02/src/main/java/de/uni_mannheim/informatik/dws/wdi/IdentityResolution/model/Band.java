@@ -5,26 +5,26 @@ import java.io.Serializable;
 import de.uni_mannheim.informatik.dws.winter.model.AbstractRecord;
 import de.uni_mannheim.informatik.dws.winter.model.defaultmodel.Attribute;
 
-    public class Artist extends AbstractRecord<Attribute> implements Serializable {
+    public class Band extends AbstractRecord<Attribute> implements Serializable {
 
         private static final long serialVersionUID = 1L;
-        private String artistName;
+        private String bandName;
 
-        public Artist(String identifier, String provenance) {
+        public Band(String identifier, String provenance) {
             super(identifier, provenance);
         }
 
-        public String getArtistName() {
-            return artistName;
+        public String getBandName() {
+            return bandName;
         }
 
-        public void setArtistName(String artistName) {
-            this.artistName = artistName;
+        public void setBandName(String bandName) {
+            this.bandName = bandName;
         }
 
         @Override
         public int hashCode() {
-            int result = 31 + ((artistName == null) ? 0 : artistName.hashCode());
+            int result = 31 + ((bandName == null) ? 0 : bandName.hashCode());
             return result;
         }
 
@@ -36,11 +36,11 @@ import de.uni_mannheim.informatik.dws.winter.model.defaultmodel.Attribute;
                 return false;
             if (getClass() != obj.getClass())
                 return false;
-            Artist other = (Artist) obj;
-            if (artistName == null) {
-                if (other.artistName != null)
+            Band other = (Band) obj;
+            if (bandName == null) {
+                if (other.bandName != null)
                     return false;
-            } else if (!artistName.equals(other.artistName))
+            } else if (!bandName.equals(other.bandName))
                 return false;
             return true;
         }
@@ -50,7 +50,7 @@ import de.uni_mannheim.informatik.dws.winter.model.defaultmodel.Attribute;
         @Override
         public boolean hasValue(Attribute attribute) {
             if(attribute==ARTISTNAME)
-                return artistName!=null;
+                return bandName!=null;
             return false;
         }
     }

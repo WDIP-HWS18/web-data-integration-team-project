@@ -1,11 +1,11 @@
-package de.uni_mannheim.informatik.dws.wdi.IdentityResolution;
+package de.uni_mannheim.informatik.dws.wdi.ExerciseIdentityResolution;
 
 import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.logging.log4j.Logger;
 
-import de.uni_mannheim.informatik.dws.wdi.IdentityResolution.model.Movie;
+import de.uni_mannheim.informatik.dws.wdi.ExerciseIdentityResolution.model.Movie;
 import de.uni_mannheim.informatik.dws.winter.model.Correspondence;
 import de.uni_mannheim.informatik.dws.winter.model.DataSet;
 import de.uni_mannheim.informatik.dws.winter.model.MatchingGoldStandard;

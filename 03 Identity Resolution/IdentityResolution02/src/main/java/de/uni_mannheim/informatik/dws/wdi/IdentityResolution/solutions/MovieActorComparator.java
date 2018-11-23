@@ -1,10 +1,10 @@
-package de.uni_mannheim.informatik.dws.wdi.IdentityResolution.solutions;
+package de.uni_mannheim.informatik.dws.wdi.ExerciseIdentityResolution.solutions;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import de.uni_mannheim.informatik.dws.wdi.IdentityResolution.model.Actor;
-import de.uni_mannheim.informatik.dws.wdi.IdentityResolution.model.Movie;
+import de.uni_mannheim.informatik.dws.wdi.ExerciseIdentityResolution.model.Actor;
+import de.uni_mannheim.informatik.dws.wdi.ExerciseIdentityResolution.model.Movie;
 import de.uni_mannheim.informatik.dws.winter.matching.rules.Comparator;
 import de.uni_mannheim.informatik.dws.winter.matching.rules.ComparatorLogger;
 import de.uni_mannheim.informatik.dws.winter.model.Correspondence;

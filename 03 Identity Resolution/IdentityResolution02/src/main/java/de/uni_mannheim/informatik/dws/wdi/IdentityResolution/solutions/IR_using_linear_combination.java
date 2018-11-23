@@ -5,17 +5,9 @@ import java.io.File;
 import org.apache.logging.log4j.Logger;
 
 import de.uni_mannheim.informatik.dws.wdi.IdentityResolution.ErrorAnalysis;
-import de.uni_mannheim.informatik.dws.wdi.IdentityResolution.Blocking.MovieBlockingKeyByDecadeGenerator;
-import de.uni_mannheim.informatik.dws.wdi.IdentityResolution.Blocking.MovieBlockingKeyByTitleGenerator;
-import de.uni_mannheim.informatik.dws.wdi.IdentityResolution.Blocking.MusicBlockingKeyBySongGenreGenerator;
 import de.uni_mannheim.informatik.dws.wdi.IdentityResolution.Blocking.MusicBlockingKeyBySongNameGenerator;
-import de.uni_mannheim.informatik.dws.wdi.IdentityResolution.Blocking.MusicBlockingKeyBySongYearGenerator;
-import de.uni_mannheim.informatik.dws.wdi.IdentityResolution.Comparators.MovieDateComparator10Years;
-import de.uni_mannheim.informatik.dws.wdi.IdentityResolution.Comparators.MovieDateComparator2Years;
-import de.uni_mannheim.informatik.dws.wdi.IdentityResolution.Comparators.MovieTitleComparatorJaccard;
-import de.uni_mannheim.informatik.dws.wdi.IdentityResolution.Comparators.MovieTitleComparatorLevenshtein;
-import de.uni_mannheim.informatik.dws.wdi.IdentityResolution.model.Movie;
-import de.uni_mannheim.informatik.dws.wdi.IdentityResolution.model.MovieXMLReader;
+import de.uni_mannheim.informatik.dws.wdi.IdentityResolution.Comparators.MusicSongNameComparatorJaccard;
+import de.uni_mannheim.informatik.dws.wdi.IdentityResolution.Comparators.MusicSongNameComparatorLevenshtein;
 import de.uni_mannheim.informatik.dws.wdi.IdentityResolution.model.Music;
 import de.uni_mannheim.informatik.dws.wdi.IdentityResolution.model.MusicXMLReader;
 import de.uni_mannheim.informatik.dws.winter.matching.MatchingEngine;
@@ -53,16 +45,17 @@ public class IR_using_linear_combination
 	 *
 	 */
 
+
 	private static final Logger logger = WinterLogManager.activateLogger("default");
 	
     public static void main( String[] args ) throws Exception
     {
 		// loading data
 		System.out.println("*\n*\tLoading datasets\n*");
+		HashedDataSet<Music, Attribute> lyrics14 = new HashedDataSet<>();
+		new MusicXMLReader().loadFromXML(new File("data/input/lyrics14.xml"), "/music/music", lyrics14);
 		HashedDataSet<Music, Attribute> million14 = new HashedDataSet<>();
 		new MusicXMLReader().loadFromXML(new File("data/input/million14.xml"), "/music/music", million14);
-		HashedDataSet<Music, Attribute> SPARQL78 = new HashedDataSet<>();
-		new MusicXMLReader().loadFromXML(new File("data/input/SPARQL78.xml"), "/music/music", SPARQL78);
 
 		// create a matching rule
 		LinearCombinationMatchingRule<Music, Attribute> matchingRule = new LinearCombinationMatchingRule<>(
@@ -70,12 +63,11 @@ public class IR_using_linear_combination
 		matchingRule.activateDebugReport("data/output/debugResultsMatchingRule.csv", 1000);
 		
 		// add comparators
-		matchingRule.addComparator(new MusicBlockingKeyBySongGenreGenerator(), 0.3);
-		//matchingRule.addComparator(new MusicBlockingKeyBySongNameGenerator(), 0.3);
-		//matchingRule.addComparator(new MusicBlockingKeyBySongGenreGenerator(), 0.7);
+		matchingRule.addComparator(new MusicSongNameComparatorLevenshtein(), 0.3);
+		matchingRule.addComparator(new MusicSongNameComparatorJaccard(), 0.7);
 		
 		// create a blocker (blocking strategy)
-		StandardRecordBlocker<Music, Attribute> blocker = new StandardRecordBlocker<Music, Attribute>(new MusicBlockingKeyBySongYearGenerator());
+		StandardRecordBlocker<Music, Attribute> blocker = new StandardRecordBlocker<Music, Attribute>(new MusicBlockingKeyBySongNameGenerator());
 		blocker.collectBlockSizeData("data/output/debugResultsBlocking.csv", 100);
 		
 		// Initialize Matching Engine
@@ -84,14 +76,14 @@ public class IR_using_linear_combination
 		System.out.println("*\n*\tRunning identity resolution\n*");
 		// Execute the matching
 		Processable<Correspondence<Music, Attribute>> correspondences = engine.runIdentityResolution(
-			million14, SPARQL78, null, matchingRule,
+			lyrics14, million14, null, matchingRule,
 				blocker);
 
 		// load the gold standard (test set)
 		System.out.println("*\n*\tLoading gold standard\n*");
 		MatchingGoldStandard gsTest = new MatchingGoldStandard();
 		gsTest.loadFromCSVFile(new File(
-				"data/goldstandard/gs_million_SPARQL_2atts1_test.csv"));
+				"data/goldstandard/gs_lyrics_million_2atts1_test.csv"));
 		
 		// evaluate your result
 		System.out.println("*\n*\tEvaluating result\n*");
@@ -100,7 +92,7 @@ public class IR_using_linear_combination
 				gsTest);
 		
 		// print the evaluation result
-		System.out.println("Academy Awards <-> Actors");
+		System.out.println("lyrics14 <-> million14");
 		System.out.println(String.format(
 				"Precision: %.4f",perfTest.getPrecision()));
 		System.out.println(String.format(
@@ -122,7 +114,7 @@ public class IR_using_linear_combination
 		perfTest = evaluator.evaluateMatching(correspondences, gsTest);
 
 		// print the evaluation result
-		System.out.println("Academy Awards <-> Actors");
+		System.out.println("lyrics14 <-> million14");
 		System.out.println(String.format(
 				"Precision: %.4f",perfTest.getPrecision()));
 		System.out.println(String.format(
