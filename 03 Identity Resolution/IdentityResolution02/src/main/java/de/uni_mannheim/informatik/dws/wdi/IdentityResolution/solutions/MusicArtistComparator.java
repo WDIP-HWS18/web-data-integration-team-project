@@ -1,10 +1,10 @@
-package de.uni_mannheim.informatik.dws.wdi.ExerciseIdentityResolution.solutions;
+package de.uni_mannheim.informatik.dws.wdi.IdentityResolution.solutions;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import de.uni_mannheim.informatik.dws.wdi.ExerciseIdentityResolution.model.Actor;
-import de.uni_mannheim.informatik.dws.wdi.ExerciseIdentityResolution.model.Movie;
+import de.uni_mannheim.informatik.dws.wdi.IdentityResolution.model.Artist;
+import de.uni_mannheim.informatik.dws.wdi.IdentityResolution.model.Music;
 import de.uni_mannheim.informatik.dws.winter.matching.rules.Comparator;
 import de.uni_mannheim.informatik.dws.winter.matching.rules.ComparatorLogger;
 import de.uni_mannheim.informatik.dws.winter.model.Correspondence;
@@ -12,7 +12,7 @@ import de.uni_mannheim.informatik.dws.winter.model.Matchable;
 import de.uni_mannheim.informatik.dws.winter.model.defaultmodel.Attribute;
 import de.uni_mannheim.informatik.dws.winter.utils.query.Q;
 
-public class MovieActorComparator  implements Comparator<Movie, Attribute> {
+public class MusicArtistComparator  implements Comparator<Music, Attribute> {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -20,18 +20,18 @@ public class MovieActorComparator  implements Comparator<Movie, Attribute> {
 
 	@Override
 	public double compare(
-			Movie record1,
-			Movie record2,
+			Music record1,
+			Music record2,
 			Correspondence<Attribute, Matchable> schemaCorrespondences) {
 		
 		Set<String> actors1 = new HashSet<>();
 		Set<String> actors2 = new HashSet<>();
 		
-		for(Actor a : record1.getActors()) {
-			actors1.add(a.getName());
+		for(Artist a : record1.getArtists()) {
+			actors1.add(a.getArtistName());
 		}
-		for(Actor a : record2.getActors()) {
-			actors2.add(a.getName());
+		for(Artist a : record2.getArtists()) {
+			actors2.add(a.getArtistName());
 		}
 		
 		double similarity = Q.intersection(actors1, actors2).size() / (double)Math.max(actors1.size(), actors2.size());

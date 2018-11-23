@@ -1,22 +1,10 @@
-package de.uni_mannheim.informatik.dws.wdi.ExerciseIdentityResolution.solutions;
+package de.uni_mannheim.informatik.dws.wdi.IdentityResolution.solutions;
 
 import java.io.File;
 
 import org.apache.logging.log4j.Logger;
 
-import de.uni_mannheim.informatik.dws.wdi.ExerciseIdentityResolution.ErrorAnalysis;
-import de.uni_mannheim.informatik.dws.wdi.ExerciseIdentityResolution.Blocking.MovieBlockingKeyByTitleGenerator;
-import de.uni_mannheim.informatik.dws.wdi.ExerciseIdentityResolution.Blocking.MovieBlockingKeyByYearGenerator;
-import de.uni_mannheim.informatik.dws.wdi.ExerciseIdentityResolution.Comparators.MovieDateComparator2Years;
-import de.uni_mannheim.informatik.dws.wdi.ExerciseIdentityResolution.Comparators.MovieDirectorComparatorJaccard;
-import de.uni_mannheim.informatik.dws.wdi.ExerciseIdentityResolution.Comparators.MovieDirectorComparatorLevenshtein;
-import de.uni_mannheim.informatik.dws.wdi.ExerciseIdentityResolution.Comparators.MovieDirectorComparatorLowerCaseJaccard;
-import de.uni_mannheim.informatik.dws.wdi.ExerciseIdentityResolution.Comparators.MovieTitleComparatorEqual;
-import de.uni_mannheim.informatik.dws.wdi.ExerciseIdentityResolution.Comparators.MovieDateComparator10Years;
-import de.uni_mannheim.informatik.dws.wdi.ExerciseIdentityResolution.Comparators.MovieTitleComparatorJaccard;
-import de.uni_mannheim.informatik.dws.wdi.ExerciseIdentityResolution.Comparators.MovieTitleComparatorLevenshtein;
-import de.uni_mannheim.informatik.dws.wdi.ExerciseIdentityResolution.model.Movie;
-import de.uni_mannheim.informatik.dws.wdi.ExerciseIdentityResolution.model.MovieXMLReader;
+import de.uni_mannheim.informatik.dws.wdi.IdentityResolution.ErrorAnalysis;
 import de.uni_mannheim.informatik.dws.wdi.IdentityResolution.Blocking.MusicBlockingKeyBySongNameGenerator;
 import de.uni_mannheim.informatik.dws.wdi.IdentityResolution.Comparators.MusicAlbumNameComparatorJaccard;
 import de.uni_mannheim.informatik.dws.wdi.IdentityResolution.Comparators.MusicAlbumNameComparatorLevenshtein;
@@ -100,7 +88,7 @@ public class IR_using_machine_learning {
 		// load the training set
 		MatchingGoldStandard gsTraining = new MatchingGoldStandard();
 		// gsTraining.loadFromCSVFile(new File("data/goldstandard/gs_academy_awards_2_actors.csv"));
-		gsTraining.loadFromCSVFile(new File("data/goldstandard/gs_academy_awards_2_actors_training.csv"));
+		gsTraining.loadFromCSVFile(new File("data/goldstandard/gs_lyrics_million_2atts1_test.csv"));
 
 		// train the matching rule's model
 		System.out.println("*\n*\tLearning matching rule\n*");

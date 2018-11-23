@@ -123,6 +123,6 @@ public class IR_using_linear_combination
 				"F1: %.4f",perfTest.getF1()));
 
 		// write the correspondences to the output file
-		new CSVCorrespondenceFormatter().writeCSV(new File("data/output/academy_awards_2_actors_correspondences.csv"), correspondences);
+		new CSVCorrespondenceFormatter().writeCSV(new File("data/output/lyrics14_2_million14_correspondences.csv"), correspondences);
     }
 }
