@@ -45,11 +45,11 @@ import de.uni_mannheim.informatik.dws.winter.model.defaultmodel.Attribute;
             return true;
         }
 
-        public static final Attribute ARTISTNAME = new Attribute("artistName");
+        public static final Attribute BANDNAME = new Attribute("bandName");
 
         @Override
         public boolean hasValue(Attribute attribute) {
-            if(attribute==ARTISTNAME)
+            if(attribute==BANDNAME)
                 return bandName!=null;
             return false;
         }
