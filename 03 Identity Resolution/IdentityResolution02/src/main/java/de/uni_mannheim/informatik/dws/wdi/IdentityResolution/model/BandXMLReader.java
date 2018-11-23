@@ -11,19 +11,19 @@ import org.w3c.dom.Node;
 import de.uni_mannheim.informatik.dws.winter.model.defaultmodel.Attribute;
 import de.uni_mannheim.informatik.dws.winter.model.io.XMLMatchableReader;
 
-public class ArtistXMLReader extends XMLMatchableReader<Artist, Attribute> {
+public class BandXMLReader extends XMLMatchableReader<Band, Attribute> {
 
     @Override
-    public Artist createModelFromElement(Node node, String provenanceInfo) {
+    public Band createModelFromElement(Node node, String provenanceInfo) {
         String id = getValueFromChildElement(node, "id");
 
         // create the object with id and provenance information
-        Artist artist = new Artist(id, provenanceInfo);
+        Band band = new Band(id, provenanceInfo);
 
         // fill the attributes
-        artist.setArtistName(getValueFromChildElement(node, "artistName"));
+        band.setBandName(getValueFromChildElement(node, "bandName"));
 
-        return artist;
+        return band;
     }
 
 }

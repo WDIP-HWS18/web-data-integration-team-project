@@ -6,9 +6,9 @@ songGenre
 albumName
 
 Comperators:
-MusicArtistNameComparatorJaccard
-MusicArtistNameComparatorLevenshtein
-MusicArtistNameComparatorLowerCaseJaccard
+ArtistArtistNameComparatorJaccard
+ArtistArtistNameComparatorLevenshtein
+ArtistArtistNameComparatorLowerCaseJaccard
 
 MusicSongNameComparatorJaccard
 MusicSongNameComparatorLevenshtein
